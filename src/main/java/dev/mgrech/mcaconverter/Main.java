@@ -1,3 +1,19 @@
+// Copyright 2021 Markus Grech
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package dev.mgrech.mcaconverter;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.querz.mca.LoadFlags;
 import net.querz.mca.MCAUtil;
@@ -73,6 +89,8 @@ public class Main
 
 	private static void convertRegion(Path path, Map<String, Integer> blockStates, Path outputDir) throws IOException
 	{
+		System.out.printf("exporting %s ...%n", path);
+
 		var parts = path.getFileName().toString().split("\\.");
 		var regionX = Integer.parseInt(parts[1]);
 		var regionZ = Integer.parseInt(parts[2]);
@@ -194,6 +212,8 @@ public class Main
 		var regionDir = Paths.get(args[1]);
 		var outputDir = Paths.get(args[2]);
 
+		Files.createDirectories(outputDir);
+
 		var blockStates = loadBlockStates(Paths.get(String.format("blocks/%s.json", version)));
 
 		Files.list(regionDir)
@@ -206,7 +226,7 @@ public class Main
 			              }
 			              catch(EOFException ex)
 			              {
-				              System.err.printf("warning: could not parse region file %s, skipping\n", path.getFileName());
+				              System.err.printf("warning: could not parse region file %s, skipping%n", path.getFileName());
 			              }
 			              catch(IOException ex)
 			              {
